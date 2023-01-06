@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.orm import relationship
-from sqlalchemy_utils import ChoiceType, EmailType
+from sqlalchemy_utils import EmailType
 
 from config import Base, ROLES
 
@@ -16,6 +16,6 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     phone = Column(Integer, unique=True, nullable=False)
-    role = Column(ChoiceType(ROLES))
+    role = Column(String, default='doc')
 
     receptions = relationship('Reception', backref='user')

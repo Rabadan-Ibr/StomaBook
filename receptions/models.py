@@ -23,6 +23,9 @@ class Tooth(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False, unique=True)
 
+    diagnoses = relationship('DiagReception', backref='tooth')
+    procedures = relationship('ProcReception', backref='tooth')
+
 
 class Diagnosis(Base):
     __tablename__ = 'diagnoses'
