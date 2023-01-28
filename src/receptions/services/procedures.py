@@ -1,8 +1,6 @@
-from .base_service import BaseService
 from ..tables import ProcedureDB
-from ..models.procedures import ProcedureCreate
+from .base_service import CRUDMixin, MainMixin
 
 
-class ProceduresService(BaseService):
+class ProceduresService(MainMixin, CRUDMixin):
     _table = ProcedureDB
-    _create_model = ProcedureCreate

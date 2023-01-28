@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
 
-class ProcedureBase(BaseModel):
+class DiagnosisBase(BaseModel):
     name: str
     detail: bool
 
 
-class ProcedureCreate(ProcedureBase):
+class DiagnosisCreate(DiagnosisBase):
     pass
 
 
-class Procedure(ProcedureBase):
+class Diagnosis(DiagnosisBase):
     id: int
 
     class Config:

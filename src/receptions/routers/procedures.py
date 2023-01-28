@@ -22,7 +22,7 @@ def read_procedure(
         proc_id: int,
         procedure_service: ProceduresService = Depends()
 ):
-    return procedure_service.get_by_id(proc_id)
+    return procedure_service.get_item(proc_id)
 
 
 @procedure_router.post('/', response_model=Procedure)
@@ -30,16 +30,16 @@ def create_procedure(
         procedure_data: ProcedureCreate,
         procedure_service: ProceduresService = Depends()
 ):
-    return procedure_service.create(procedure_data)
+    return procedure_service.create_item(procedure_data.dict())
 
 
 @procedure_router.put('/{proc_id}', response_model=Procedure)
-def change_procedure(
+def update_procedure(
         proc_id: int,
         procedure_data: ProcedureCreate,
         procedure_service: ProceduresService = Depends()
 ):
-    return procedure_service.edit(proc_id, procedure_data)
+    return procedure_service.edit_item(proc_id, procedure_data.dict())
 
 
 @procedure_router.delete('/{proc_id}')
@@ -47,5 +47,5 @@ def delete_procedure(
         proc_id: int,
         procedure_service: ProceduresService = Depends()
 ):
-    procedure_service.delete(proc_id)
+    procedure_service.delete_item(proc_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
