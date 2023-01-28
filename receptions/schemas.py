@@ -1,7 +1,4 @@
-from pydantic import BaseModel, validator
-
-from dependency import get_db
-from receptions.models import Procedure, Diagnosis
+from pydantic import BaseModel
 
 
 class DiagnosisBaseSchem(BaseModel):
@@ -10,18 +7,10 @@ class DiagnosisBaseSchem(BaseModel):
 
 
 class DiagnosisCreateSchem(DiagnosisBaseSchem):
-
-    @validator('name')
-    def name_must_unique(cls, v: str):
-        db = next(get_db())
-        name = v.title()
-        db_item = db.query(Diagnosis).filter_by(name=name).first()
-        if db_item is not None:
-            raise ValueError('must be unique')
-        return name
+    pass
 
 
-class DiagnosisSchem(DiagnosisBaseSchem):
+class DiagnosisDTO(DiagnosisBaseSchem):
     id: int
 
     class Config:
@@ -34,18 +23,10 @@ class ProcedureBaseSchem(BaseModel):
 
 
 class ProcedureCreateSchem(ProcedureBaseSchem):
-
-    @validator('name')
-    def name_must_unique(cls, v: str):
-        db = next(get_db())
-        name = v.title()
-        db_item = db.query(Procedure).filter_by(name=name).first()
-        if db_item is not None:
-            raise ValueError('must be unique')
-        return name
+    pass
 
 
-class ProcedureSchem(ProcedureBaseSchem):
+class ProcedureDTO(ProcedureBaseSchem):
     id: int
 
     class Config:
@@ -57,17 +38,10 @@ class ToothBaseSchem(BaseModel):
 
 
 class ToothCreateSchem(ToothBaseSchem):
-
-    @validator('name')
-    def name_must_unique(cls, v: int):
-        db = next(get_db())
-        db_item = db.query(Procedure).filter_by(name=v).first()
-        if db_item is not None:
-            raise ValueError('must be unique')
-        return v
+    pass
 
 
-class ToothSchem(ToothBaseSchem):
+class ToothDTO(ToothBaseSchem):
     id: int
 
     class Config:
@@ -82,7 +56,7 @@ class ClientCreateSchem(BaseModel):
     note: str = None
 
 
-class ClientSchem(ClientCreateSchem):
+class ClientDTO(ClientCreateSchem):
     id: int
 
     class Config:

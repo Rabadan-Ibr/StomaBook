@@ -1,18 +1,16 @@
-"""First migration
+"""Create new base
 
-Revision ID: d1ce531ea878
+Revision ID: 6b36be9d5ffb
 Revises: 
-Create Date: 2022-12-27 23:20:13.456049
+Create Date: 2023-01-27 04:56:50.107679
 
 """
 from alembic import op
 import sqlalchemy as sa
-import sqlalchemy_utils
-from config import ROLES
 
 
 # revision identifiers, used by Alembic.
-revision = 'd1ce531ea878'
+revision = '6b36be9d5ffb'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -58,11 +56,11 @@ def upgrade() -> None:
     sa.Column('first_name', sa.String(), nullable=False),
     sa.Column('last_name', sa.String(), nullable=False),
     sa.Column('username', sa.String(), nullable=False),
-    sa.Column('email', sqlalchemy_utils.types.email.EmailType(length=255), nullable=True),
+    sa.Column('email', sa.String(), nullable=True),
     sa.Column('hashed_password', sa.String(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.Column('phone', sa.Integer(), nullable=False),
-    sa.Column('role', sqlalchemy_utils.types.choice.ChoiceType(ROLES), nullable=True),
+    sa.Column('role', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('phone'),

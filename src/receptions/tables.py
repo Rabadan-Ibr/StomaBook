@@ -1,10 +1,10 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from config import Base
+from src.db import Base
 
 
-class Client(Base):
+class ClientDB(Base):
     __tablename__ = 'clients'
 
     id = Column(Integer, primary_key=True, index=True)
@@ -14,28 +14,31 @@ class Client(Base):
     email = Column(String)
     note = Column(String)
 
-    receptions = relationship('Reception', backref='client')
+    receptions = relationship('ReceptionDB', backref='client')
 
 
-class Tooth(Base):
+class ToothDB(Base):
     __tablename__ = 'teeth'
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False, unique=True)
 
-    diagnoses = relationship('DiagReception', backref='tooth')
-    procedures = relationship('ProcReception', backref='tooth')
+    diagnoses = relationship('DiagReceptionDB', backref='tooth')
+    procedures = relationship('ProcReceptionDB', backref='tooth')
 
 
-class Diagnosis(Base):
+class DiagnosisDB(Base):
     __tablename__ = 'diagnoses'
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False, unique=True)
     detail = Column(Boolean, default=True)
 
+    def __str__(self):
+        return self.__tablename__
 
-class Procedure(Base):
+
+class ProcedureDB(Base):
     __tablename__ = 'procedures'
 
     id = Column(Integer, primary_key=True, index=True)
@@ -43,7 +46,7 @@ class Procedure(Base):
     detail = Column(Boolean, default=True)
 
 
-class DiagReception(Base):
+class DiagReceptionDB(Base):
     __tablename__ = 'diag_reception'
 
     id = Column(Integer, primary_key=True, index=True)
@@ -53,7 +56,7 @@ class DiagReception(Base):
     note = Column(String)
 
 
-class ProcReception(Base):
+class ProcReceptionDB(Base):
     __tablename__ = 'proc_reception'
 
     id = Column(Integer, primary_key=True, index=True)
@@ -63,7 +66,7 @@ class ProcReception(Base):
     note = Column(String)
 
 
-class Reception(Base):
+class ReceptionDB(Base):
     __tablename__ = 'receptions'
 
     id = Column(Integer, primary_key=True, index=True)
@@ -72,6 +75,6 @@ class Reception(Base):
     doctor_id = Column(ForeignKey('users.id'), nullable=False)
     client_id = Column(ForeignKey('clients.id'), nullable=False)
 
-    diagnoses = relationship('DiagReception', backref='reception')
-    procedures = relationship('ProcReception', backref='reception')
+    diagnoses = relationship('DiagReceptionDB', backref='reception')
+    procedures = relationship('ProcReceptionDB', backref='reception')
 
