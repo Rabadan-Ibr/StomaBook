@@ -2,7 +2,11 @@ from fastapi import APIRouter
 
 from .diagnoses import diagnosis_router
 from .procedures import procedure_router
+from .teeth import tooth_router
+from .clients import client_router
 
 receptions_router = APIRouter()
 receptions_router.include_router(procedure_router)
 receptions_router.include_router(diagnosis_router)
+receptions_router.include_router(tooth_router)
+receptions_router.include_router(client_router)
