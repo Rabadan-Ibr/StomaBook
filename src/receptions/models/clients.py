@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -5,8 +7,8 @@ class ClientBase(BaseModel):
     first_name: str
     last_name: str
     phone: int
-    email: str = None
-    note: str = None
+    email: Optional[str] = None
+    note: Optional[str] = None
 
 
 class ClientCreate(ClientBase):

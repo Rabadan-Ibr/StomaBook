@@ -54,7 +54,6 @@ class DiagReceptionDB(Base):
     diag_id = Column(ForeignKey('diagnoses.id'), nullable=False)
     reception_id = Column(ForeignKey('receptions.id'), nullable=False)
     tooth_id = Column(ForeignKey('teeth.id'))
-    note = Column(String)
 
 
 class ProcReceptionDB(Base):
@@ -64,7 +63,6 @@ class ProcReceptionDB(Base):
     proc_id = Column(ForeignKey('procedures.id'), nullable=False)
     reception_id = Column(ForeignKey('receptions.id'), nullable=False)
     tooth_id = Column(ForeignKey('teeth.id'))
-    note = Column(String)
 
 
 class ReceptionDB(Base):
