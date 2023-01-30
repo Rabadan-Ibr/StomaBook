@@ -1,3 +1,32 @@
+from fastapi import APIRouter, Depends
+from ..models.users import User, UserCreate
+from ..services.users import UserService
+
+user_router = APIRouter(
+    prefix='/users',
+    tags=['User']
+)
+
+
+@user_router.post('/', response_model=User)
+def create_user(user_data: UserCreate, user_service: UserService = Depends()):
+    return user_service.create_user(user_data)
+
+
+@user_router.put('/{user_id}', response_model=User)
+def update_user(
+        user_id: int,
+        user_data: UserCreate,
+        user_service: UserService = Depends()
+):
+    return user_service.edit_user(user_id, user_data)
+
+
+
+
+
+
+
 # from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 #
 # from fastapi import APIRouter, Depends, HTTPException
@@ -8,25 +37,7 @@
 # from users.utils import create_access_token
 #
 #
-# user_router = APIRouter(tags=['users'])
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
-#
-#
-# @user_router.get('/users/', response_model=list[UserSchem])
-# def read_users():
-#     return get_list(User)
-#
-#
-# @user_router.post('/users/', response_model=UserSchem)
-# def create_user(user_schem: UserCreateSchem):
-#     hashed_password = pwd_context.hash(user_schem.password)
-#     user = UserDBSchem(**user_schem.dict(), hashed_password=hashed_password)
-#     return create_item(user, User)
-#
-#
-# @user_router.get('/users/{user_id}', response_model=UserSchem)
-# def read_user(user_id: int):
-#     return get_by_id(user_id, User)
+
 #
 #
 # @user_router.post('/users/login/', response_model=Token)

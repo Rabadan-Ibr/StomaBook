@@ -1,4 +1,11 @@
+from enum import Enum
+
 from pydantic import BaseModel
+
+
+class Role(str, Enum):
+    DOC = 'doc'
+    ADMIN = 'admin'
 
 
 class UserBase(BaseModel):
@@ -11,6 +18,15 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+
+
+class UserEdit(UserBase):
+    pass
+
+
+class UserEditAdmin(BaseModel):
+    is_active: bool
+    role: str
 
 
 class UserToDB(UserBase):

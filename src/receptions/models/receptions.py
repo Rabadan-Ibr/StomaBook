@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
 from .clients import Client
-from src.users.models.users import User
+from users.models.users import User
 
 
 class ReceptionBase(BaseModel):

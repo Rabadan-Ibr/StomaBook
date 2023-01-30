@@ -18,16 +18,6 @@ class ClientDB(Base):
     receptions = relationship('ReceptionDB', backref='client')
 
 
-class ToothDB(Base):
-    __tablename__ = 'teeth'
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False, unique=True)
-
-    diagnoses = relationship('DiagReceptionDB', backref='tooth')
-    procedures = relationship('ProcReceptionDB', backref='tooth')
-
-
 class DiagnosisDB(Base):
     __tablename__ = 'diagnoses'
 
@@ -53,7 +43,7 @@ class DiagReceptionDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     diag_id = Column(ForeignKey('diagnoses.id'), nullable=False)
     reception_id = Column(ForeignKey('receptions.id'), nullable=False)
-    tooth_id = Column(ForeignKey('teeth.id'))
+    tooth = Column(String)
 
 
 class ProcReceptionDB(Base):
@@ -62,7 +52,7 @@ class ProcReceptionDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     proc_id = Column(ForeignKey('procedures.id'), nullable=False)
     reception_id = Column(ForeignKey('receptions.id'), nullable=False)
-    tooth_id = Column(ForeignKey('teeth.id'))
+    tooth = Column(String)
 
 
 class ReceptionDB(Base):
@@ -76,4 +66,3 @@ class ReceptionDB(Base):
 
     diagnoses = relationship('DiagReceptionDB', backref='reception')
     procedures = relationship('ProcReceptionDB', backref='reception')
-
