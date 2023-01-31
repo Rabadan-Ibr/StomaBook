@@ -26,17 +26,18 @@ class UserEdit(UserBase):
 
 class UserEditAdmin(BaseModel):
     is_active: bool
-    role: str
+    role: Role
 
 
 class UserToDB(UserBase):
     hashed_password: str
+    role: Role = Role.DOC
 
 
 class User(UserBase):
     id: int
     is_active: bool
-    role: str
+    role: Role
 
     class Config:
         orm_mode = True
