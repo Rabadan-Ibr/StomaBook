@@ -17,4 +17,4 @@ class UserDB(Base):
     phone = Column(Integer, unique=True, nullable=False)
     role = Column(String, default='doc')
 
-    receptions = relationship('ReceptionDB', backref='user')
+    receptions = relationship('ReceptionDB', backref='doctor')

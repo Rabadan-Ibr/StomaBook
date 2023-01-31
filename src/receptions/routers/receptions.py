@@ -5,6 +5,9 @@ from users.models.users import Role
 from users.services.auth import AuthService
 from users.tables import UserDB
 from ..models.receptions import Reception, ReceptionCreate
+from ..services.clients import ClientsService
+from ..services.diagnoses import DiagnosesService
+from ..services.procedures import ProceduresService
 from ..services.receptions import ReceptionsService
 
 reception_router = APIRouter(
@@ -18,13 +21,18 @@ def read_receptions(
         reception_service: ReceptionsService = Depends(),
         user: UserDB = Depends(AuthService(Role.DOC))
 ):
-    pass
+    return reception_service.list()
 
 
 @reception_router.post('/', response_model=Reception)
 def create_reception(
         reception_data: ReceptionCreate,
         reception_service: ReceptionsService = Depends(),
-        user: UserDB = Depends(AuthService(Role.DOC))
+        user: UserDB = Depends(AuthService(Role.DOC)),
+        proc_service: ProceduresService = Depends(),
+        diag_service: DiagnosesService = Depends(),
+        client_service: ClientsService = Depends()
 ):
-    pass
+    return reception_service.create(
+        reception_data, user, proc_service, diag_service, client_service
+    )

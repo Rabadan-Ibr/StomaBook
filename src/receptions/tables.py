@@ -40,19 +40,23 @@ class ProcedureDB(Base):
 class DiagReceptionDB(Base):
     __tablename__ = 'diag_reception'
 
-    id = Column(Integer, primary_key=True, index=True)
-    diag_id = Column(ForeignKey('diagnoses.id'), nullable=False)
-    reception_id = Column(ForeignKey('receptions.id'), nullable=False)
+    diag_id = Column(ForeignKey('diagnoses.id'), primary_key=True)
+    reception_id = Column(ForeignKey('receptions.id'), primary_key=True)
     tooth = Column(String)
+
+    reception = relationship('ReceptionDB', backref='diagnoses')
+    diagnosis = relationship('DiagnosisDB', backref='receptions')
 
 
 class ProcReceptionDB(Base):
     __tablename__ = 'proc_reception'
 
-    id = Column(Integer, primary_key=True, index=True)
-    proc_id = Column(ForeignKey('procedures.id'), nullable=False)
-    reception_id = Column(ForeignKey('receptions.id'), nullable=False)
+    proc_id = Column(ForeignKey('procedures.id'), primary_key=True)
+    reception_id = Column(ForeignKey('receptions.id'), primary_key=True)
     tooth = Column(String)
+
+    reception = relationship('ReceptionDB', backref='procedures')
+    procedure = relationship('ProcedureDB', backref='receptions')
 
 
 class ReceptionDB(Base):
@@ -63,6 +67,3 @@ class ReceptionDB(Base):
     note = Column(String)
     doctor_id = Column(ForeignKey('users.id'), nullable=False)
     client_id = Column(ForeignKey('clients.id'), nullable=False)
-
-    diagnoses = relationship('DiagReceptionDB', backref='reception')
-    procedures = relationship('ProcReceptionDB', backref='reception')

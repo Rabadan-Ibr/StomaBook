@@ -15,6 +15,15 @@ class ProceduresService(CRUDMixin):
     def __init__(self, session: SessionLocal = Depends(get_session)):
         self._session = session
 
+    def get(self, proc_id: int) -> _table:
+        procedure = self._get_item(proc_id)
+        if procedure is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        return procedure
+
+    def detail(self, proc_id: int) -> _table:
+        return self.get(proc_id)
+
     def list(self) -> List[_table]:
         return self._get_list()
 
@@ -25,13 +34,9 @@ class ProceduresService(CRUDMixin):
         return self._create_item(data.dict())
 
     def edit(self, proc_id: int, data: ProcedureCreate) -> _table:
-        procedure = self._get_item(proc_id)
-        if procedure is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        procedure = self.get(proc_id)
         return self._edit_item(procedure, data.dict())
 
     def delete(self, proc_id: int):
-        procedure = self._get_item(proc_id)
-        if procedure is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        procedure = self.get(proc_id)
         self._delete_item(procedure)

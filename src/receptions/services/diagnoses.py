@@ -15,6 +15,15 @@ class DiagnosesService(CRUDMixin):
     def __init__(self, session: SessionLocal = Depends(get_session)):
         self._session = session
 
+    def get(self, diag_id: int) -> _table:
+        diagnosis = self._get_item(diag_id)
+        if diagnosis is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        return diagnosis
+
+    def detail(self, diag_id: int) -> _table:
+        return self.get(diag_id)
+
     def list(self) -> List[_table]:
         return self._get_list()
 
@@ -25,13 +34,9 @@ class DiagnosesService(CRUDMixin):
         return self._create_item(data.dict())
 
     def edit(self, diag_id: int, data: DiagnosisCreate) -> _table:
-        diagnosis = self._get_item(diag_id)
-        if diagnosis is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        diagnosis = self.get(diag_id)
         return self._edit_item(diagnosis, data.dict())
 
     def delete(self, diag_id: int):
-        diagnosis = self._get_item(diag_id)
-        if diagnosis is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        diagnosis = self.get(diag_id)
         self._delete_item(diagnosis)

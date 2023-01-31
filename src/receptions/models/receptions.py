@@ -18,7 +18,10 @@ class ProcRecordCreate(RecordBase):
 
 
 class ProcRecord(RecordBase):
-    proc_id: Procedure
+    procedure: Procedure
+
+    class Config:
+        orm_mode = True
 
 
 class DiagRecordCreate(RecordBase):
@@ -26,26 +29,34 @@ class DiagRecordCreate(RecordBase):
 
 
 class DiagRecord(RecordBase):
-    diag_id: Diagnosis
+    diagnosis: Diagnosis
+
+    class Config:
+        orm_mode = True
 
 
 class ReceptionBase(BaseModel):
-    event_date: datetime
+    event_date: Optional[datetime] = None
     note: Optional[str] = None
 
 
 class ReceptionCreate(ReceptionBase):
     client_id: int
-    procedures: List[ProcRecordCreate]
-    diagnoses: List[DiagRecordCreate]
+    procedures: Optional[List[ProcRecordCreate]] = None
+    diagnoses: Optional[List[DiagRecordCreate]] = None
+
+
+class ReceptionToDB(ReceptionBase):
+    client_id: int
+    doctor_id: int
 
 
 class Reception(ReceptionBase):
     id: int
-    client_id: Client
-    doctor_id: User
-    procedures: List[ProcRecord]
-    diagnoses: List[DiagRecord]
+    client: Client
+    doctor: User
+    procedures: Optional[List[ProcRecord]] = None
+    diagnoses: Optional[List[DiagRecord]] = None
 
     class Config:
         orm_mode = True
