@@ -1,11 +1,20 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from ..models.users import User, UserCreate
+from ..services.auth import AuthService
 from ..services.users import UserService
+from ..tables import UserDB
 
 user_router = APIRouter(
     prefix='/users',
     tags=['User']
 )
+
+
+@user_router.get('/', response_model=List[User])
+def get_users(user_service: UserService = Depends()):
+    return user_service.list()
 
 
 @user_router.post('/', response_model=User)
@@ -22,32 +31,6 @@ def update_user(
     return user_service.edit_user(user_id, user_data)
 
 
-
-
-
-
-
-# from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-#
-# from fastapi import APIRouter, Depends, HTTPException
-# from users.schemas import UserSchem, UserCreateSchem, UserDBSchem, TokenData, Token
-# from cruds import get_list, get_by_id, create_item, get_by_field
-# from users.models import User
-# from config import pwd_context
-# from users.utils import create_access_token
-#
-#
-
-#
-#
-# @user_router.post('/users/login/', response_model=Token)
-# def user_login(form_data: OAuth2PasswordRequestForm = Depends()):
-#     try:
-#         user = get_by_field('username', form_data.username, User)
-#         if not pwd_context.verify(form_data.password, user.hashed_password):
-#             raise Exception()
-#     except (HTTPException, Exception):
-#         raise HTTPException(status_code=400, detail='Wrong password or username.')
-#     token_data = TokenData(id=user.id, username=user.username).dict()
-#     token = create_access_token(token_data)
-#     return {"access_token": token, "token_type": "bearer"}
+@user_router.get('/me', response_model=User)
+def get_me(user: UserDB = Depends(AuthService())):
+    return user

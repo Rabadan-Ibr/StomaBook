@@ -1,18 +1,21 @@
 from fastapi import Depends, HTTPException
 from starlette import status
 
-from common.orm.mixins import RetrieveMixin, CreateMixin, UpdateMixin
+from common.orm.mixins import RetrieveMixin, CreateMixin, UpdateMixin, ListMixin
 from db import SessionLocal, get_session
 from settings import pwd_context
 from users.models.users import UserCreate, UserToDB
 from users.tables import UserDB
 
 
-class UserService(RetrieveMixin, CreateMixin, UpdateMixin):
+class UserService(RetrieveMixin, CreateMixin, UpdateMixin, ListMixin):
     _table = UserDB
 
     def __init__(self, session: SessionLocal = Depends(get_session)):
         self._session = session
+
+    def list(self):
+        return self._get_list()
 
     def create_user(self, data: UserCreate) -> _table:
         unique_fields: tuple = ('username', 'email', 'phone')

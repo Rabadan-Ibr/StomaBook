@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import Optional
+
 from pydantic import BaseModel
 from .users import User
 
@@ -7,5 +10,7 @@ class Token(BaseModel):
     token_type: str = 'bearer'
 
 
-class TokenData(User):
-    pass
+class TokenData(BaseModel):
+    exp: datetime
+    sub: str
+    user: Optional[User] = None

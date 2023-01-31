@@ -1,8 +1,8 @@
-"""Probe
+"""teeth delete
 
-Revision ID: 4df17d51777e
+Revision ID: 05fc4a05e84c
 Revises: 
-Create Date: 2023-01-28 17:21:52.208600
+Create Date: 2023-01-31 01:43:29.753689
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4df17d51777e'
+revision = '05fc4a05e84c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,13 +44,6 @@ def upgrade() -> None:
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_procedures_id'), 'procedures', ['id'], unique=False)
-    op.create_table('teeth',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(), nullable=False),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
-    )
-    op.create_index(op.f('ix_teeth_id'), 'teeth', ['id'], unique=False)
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(), nullable=False),
@@ -82,11 +75,9 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('diag_id', sa.Integer(), nullable=False),
     sa.Column('reception_id', sa.Integer(), nullable=False),
-    sa.Column('tooth_id', sa.Integer(), nullable=True),
-    sa.Column('note', sa.String(), nullable=True),
+    sa.Column('tooth', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['diag_id'], ['diagnoses.id'], ),
     sa.ForeignKeyConstraint(['reception_id'], ['receptions.id'], ),
-    sa.ForeignKeyConstraint(['tooth_id'], ['teeth.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_diag_reception_id'), 'diag_reception', ['id'], unique=False)
@@ -94,11 +85,9 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('proc_id', sa.Integer(), nullable=False),
     sa.Column('reception_id', sa.Integer(), nullable=False),
-    sa.Column('tooth_id', sa.Integer(), nullable=True),
-    sa.Column('note', sa.String(), nullable=True),
+    sa.Column('tooth', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['proc_id'], ['procedures.id'], ),
     sa.ForeignKeyConstraint(['reception_id'], ['receptions.id'], ),
-    sa.ForeignKeyConstraint(['tooth_id'], ['teeth.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_proc_reception_id'), 'proc_reception', ['id'], unique=False)
@@ -115,8 +104,6 @@ def downgrade() -> None:
     op.drop_table('receptions')
     op.drop_index(op.f('ix_users_id'), table_name='users')
     op.drop_table('users')
-    op.drop_index(op.f('ix_teeth_id'), table_name='teeth')
-    op.drop_table('teeth')
     op.drop_index(op.f('ix_procedures_id'), table_name='procedures')
     op.drop_table('procedures')
     op.drop_index(op.f('ix_diagnoses_id'), table_name='diagnoses')
