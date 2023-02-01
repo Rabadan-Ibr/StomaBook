@@ -40,6 +40,7 @@ class ReceptionsService(CRUDMixin):
         client_service.detail(data.client_id)
         reception_data = ReceptionToDB(**data.dict(), doctor_id=user.id)
         reception = self._create_item(reception_data.dict())
+
         for diag_record_data in data.diagnoses:
             diag = diag_service.get(diag_record_data.diag_id)
             diag_record = DiagReceptionDB(tooth=diag_record_data.tooth)
@@ -50,6 +51,7 @@ class ReceptionsService(CRUDMixin):
             proc_record = ProcReceptionDB(tooth=proc_record_data.tooth)
             proc_record.procedure = proc
             reception.procedures.append(proc_record)
+
         self._session.commit()
         return reception
 
@@ -66,13 +68,15 @@ class ReceptionsService(CRUDMixin):
         reception = self.get(reception_id)
         reception_data = ReceptionToDB(**data.dict(), doctor_id=user.id)
         reception = self._edit_item(reception, reception_data.dict())
+
         if reception.doctor_id != user.id:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+
         for proc in reception.procedures:
             self._session.delete(proc)
         for diag in reception.diagnoses:
             self._session.delete(diag)
-        print(reception.procedures)
+
         for diag_record_data in data.diagnoses:
             diag = diag_service.get(diag_record_data.diag_id)
             diag_record = DiagReceptionDB(tooth=diag_record_data.tooth)
@@ -83,5 +87,6 @@ class ReceptionsService(CRUDMixin):
             proc_record = ProcReceptionDB(tooth=proc_record_data.tooth)
             proc_record.procedure = proc
             reception.procedures.append(proc_record)
+
         self._session.commit()
         return reception
