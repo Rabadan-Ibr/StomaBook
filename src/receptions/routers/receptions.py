@@ -36,3 +36,32 @@ def create_reception(
     return reception_service.create(
         reception_data, user, proc_service, diag_service, client_service
     )
+
+
+@reception_router.get('/{reception_id}', response_model=Reception)
+def read_reception(
+        reception_id: int,
+        reception_service: ReceptionsService = Depends(),
+        user: UserDB = Depends(AuthService(Role.DOC))
+):
+    return reception_service.detail(reception_id)
+
+
+@reception_router.put('/{reception_id}', response_model=Reception)
+def update_reception(
+        reception_id: int,
+        reception_data: ReceptionCreate,
+        reception_service: ReceptionsService = Depends(),
+        user: UserDB = Depends(AuthService(Role.DOC)),
+        proc_service: ProceduresService = Depends(),
+        diag_service: DiagnosesService = Depends(),
+        client_service: ClientsService = Depends()
+):
+    return reception_service.edit(
+        reception_id,
+        reception_data,
+        user,
+        proc_service,
+        diag_service,
+        client_service
+    )
