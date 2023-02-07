@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import Depends, HTTPException
 from starlette import status
@@ -24,8 +24,9 @@ class DiagnosesService(CRUDMixin):
     def detail(self, diag_id: int) -> _table:
         return self.get(diag_id)
 
-    def list(self) -> List[_table]:
-        return self._get_list()
+    def list(self, name: Optional[str] = None) -> List[_table]:
+        filters = {} if name is None else {'name': name}
+        return self._get_list(filters)
 
     def create(self, data: DiagnosisCreate) -> _table:
         exists = self._get_by_field('name', data.name)

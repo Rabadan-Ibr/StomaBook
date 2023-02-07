@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, Response
 from starlette import status
 
@@ -15,10 +17,11 @@ diagnosis_router = APIRouter(
 
 @diagnosis_router.get('/', response_model=list[Diagnosis])
 def read_diagnoses(
+        name: Optional[str] = None,
         diagnosis_service: DiagnosesService = Depends(),
         user: UserDB = Depends(AuthService(Role.DOC))
 ):
-    return diagnosis_service.list()
+    return diagnosis_service.list(name)
 
 
 @diagnosis_router.post('/', response_model=Diagnosis)

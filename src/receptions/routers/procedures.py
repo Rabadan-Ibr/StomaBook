@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, Response
 from starlette import status
 
@@ -15,10 +17,11 @@ procedure_router = APIRouter(
 
 @procedure_router.get('/', response_model=list[Procedure])
 def read_procedures(
+        name: Optional[str] = None,
         procedure_service: ProceduresService = Depends(),
         user: UserDB = Depends(AuthService(Role.DOC))
 ):
-    return procedure_service.list()
+    return procedure_service.list(name)
 
 
 @procedure_router.post('/', response_model=Procedure)

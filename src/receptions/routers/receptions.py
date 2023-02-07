@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends, Response
-from starlette import status
+from fastapi import APIRouter, Depends
 
 from users.models.users import Role
 from users.services.auth import AuthService

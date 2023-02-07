@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import select
 
@@ -11,9 +11,14 @@ class BaseMixins:
 
 class ListMixin(BaseMixins):
 
-    def _get_list(self) -> List["ListMixin._table"]:
-        items = self._session.query(self._table).all()
-        return items
+    def _get_list(
+            self, filters: Optional[dict] = None
+    ) -> List["ListMixin._table"]:
+        stmt = select(self._table)
+        if filters is not None:
+            for field, value in filters.items():
+                stmt = stmt.where(getattr(self._table, field).contains(value))
+        return self._session.scalars(stmt).all()
 
 
 class RetrieveMixin(BaseMixins):
