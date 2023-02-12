@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, Response
 from starlette import status
 
@@ -13,12 +15,21 @@ client_router = APIRouter(
 )
 
 
+def client_filters(
+        phone: Optional[int] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None
+):
+    return {'phone': phone, 'first_name': first_name, 'last_name': last_name}
+
+
 @client_router.get('/', response_model=list[Client])
 def read_clients(
+        filters: dict = Depends(client_filters),
         client_service: ClientsService = Depends(),
         user: UserDB = Depends(AuthService(Role.DOC))
 ):
-    return client_service.list()
+    return client_service.list(filters)
 
 
 @client_router.get('/{client_id}', response_model=Client)

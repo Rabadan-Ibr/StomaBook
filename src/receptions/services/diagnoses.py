@@ -24,8 +24,7 @@ class DiagnosesService(CRUDMixin):
     def detail(self, diag_id: int) -> _table:
         return self.get(diag_id)
 
-    def list(self, name: Optional[str] = None) -> List[_table]:
-        filters = {} if name is None else {'name': name}
+    def list(self, filters: Optional[dict] = None) -> List[_table]:
         return self._get_list(filters)
 
     def create(self, data: DiagnosisCreate) -> _table:

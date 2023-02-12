@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import Depends, HTTPException
 from starlette import status
@@ -15,8 +15,8 @@ class ClientsService(CRUDMixin):
     def __init__(self, session: SessionLocal = Depends(get_session)):
         self._session = session
 
-    def list(self) -> List[_table]:
-        return self._get_list()
+    def list(self, filters: Optional[dict] = None) -> List[_table]:
+        return self._get_list(filters)
 
     def detail(self, client_id: int) -> _table:
         client = self._get_item(client_id)

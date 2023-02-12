@@ -17,6 +17,8 @@ class ListMixin(BaseMixins):
         stmt = select(self._table)
         if filters is not None:
             for field, value in filters.items():
+                if value is None:
+                    continue
                 stmt = stmt.where(getattr(self._table, field).contains(value))
         return self._session.scalars(stmt).all()
 
@@ -33,11 +35,19 @@ class RetrieveMixin(BaseMixins):
 
 class CreateMixin(BaseMixins):
 
-    def _create_item(self, item_data: dict) -> 'CreateMixin._table':
+    def __create(self, item_data: dict) -> 'CreateMixin._table':
         item = self._table(**item_data)
         self._session.add(item)
+        return item
+
+    def _create_item(self, item_data: dict) -> 'CreateMixin._table':
+        item = self.__create(item_data)
         self._session.commit()
         self._session.refresh(item)
+        return item
+
+    def _create_item_m2m(self, item_data: dict) -> 'CreateMixin._table':
+        item = self.__create(item_data)
         return item
 
 
@@ -50,11 +60,19 @@ class DeleteMixin(BaseMixins):
 
 class UpdateMixin(BaseMixins):
 
-    def _edit_item(self, item: Base, item_data: dict) -> 'UpdateMixin._table':
+    def __edit(self, item: Base, item_data: dict) -> 'UpdateMixin._table':
         for key, value in item_data.items():
             setattr(item, key, value)
+        return item
+
+    def _edit_item(self, item: Base, item_data: dict) -> 'UpdateMixin._table':
+        item = self.__edit(item, item_data)
         self._session.commit()
         self._session.refresh(item)
+        return item
+
+    def _edit_item_m2m(self, item: Base, item_data: dict) -> 'UpdateMixin._table':
+        item = self.__edit(item, item_data)
         return item
 
 

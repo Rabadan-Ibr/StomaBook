@@ -46,9 +46,13 @@ class ReceptionCreate(ReceptionBase):
     diagnoses: Optional[List[DiagRecordCreate]] = None
 
 
-class ReceptionToDB(ReceptionBase):
+class ReceptionCreateDB(ReceptionBase):
     client_id: int
     doctor_id: int
+
+
+class ReceptionEditDB(ReceptionBase):
+    client_id: int
 
 
 class Reception(ReceptionBase):

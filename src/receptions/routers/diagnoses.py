@@ -15,13 +15,17 @@ diagnosis_router = APIRouter(
 )
 
 
+def diagnosis_filters(name: Optional[str] = None):
+    return {'name': name}
+
+
 @diagnosis_router.get('/', response_model=list[Diagnosis])
 def read_diagnoses(
-        name: Optional[str] = None,
+        filters: dict = Depends(diagnosis_filters),
         diagnosis_service: DiagnosesService = Depends(),
         user: UserDB = Depends(AuthService(Role.DOC))
 ):
-    return diagnosis_service.list(name)
+    return diagnosis_service.list(filters)
 
 
 @diagnosis_router.post('/', response_model=Diagnosis)

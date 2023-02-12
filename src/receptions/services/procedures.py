@@ -24,8 +24,7 @@ class ProceduresService(CRUDMixin):
     def detail(self, proc_id: int) -> _table:
         return self.get(proc_id)
 
-    def list(self, name: Optional[str] = None) -> List[_table]:
-        filters = {} if name is None else {'name': name}
+    def list(self, filters: Optional[dict] = None) -> List[_table]:
         return self._get_list(filters)
 
     def create(self, data: ProcedureCreate) -> _table:

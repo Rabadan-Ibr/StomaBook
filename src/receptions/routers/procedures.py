@@ -15,13 +15,17 @@ procedure_router = APIRouter(
 )
 
 
+def procedure_filters(name: Optional[str] = None):
+    return {'name': name}
+
+
 @procedure_router.get('/', response_model=list[Procedure])
 def read_procedures(
-        name: Optional[str] = None,
+        filters: dict = Depends(procedure_filters),
         procedure_service: ProceduresService = Depends(),
         user: UserDB = Depends(AuthService(Role.DOC))
 ):
-    return procedure_service.list(name)
+    return procedure_service.list(filters)
 
 
 @procedure_router.post('/', response_model=Procedure)
